@@ -1,0 +1,43 @@
+# Node & pnpm
+node_modules/
+.pnpm-store/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Build output
+/dist/
+apps/web/dist/
+netlify/functions/dist/
+
+# Vite
+.vite/
+
+# TypeScript
+*.tsbuildinfo
+
+# Editor/OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Netlify
+.netlify/
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# Coverage
+coverage/
+
+# Misc
+*.local

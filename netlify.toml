@@ -1,0 +1,9 @@
+[build]
+  command = "pnpm install && pnpm build"
+  publish = "apps/web/dist"
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/game-api/:splat"
+  status = 200
