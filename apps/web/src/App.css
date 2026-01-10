@@ -1,6 +1,6 @@
 * {
   box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Oswald", sans-serif;
 }
 
 body {
@@ -26,18 +26,6 @@ body {
   box-shadow: 0 0 25px rgba(255, 79, 195, 0.3);
 }
 
-/* LOGO */
-.logo {
-  width: 75px;
-  height: 75px;
-  background: linear-gradient(135deg, #f00592, #ff77d4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  margin: auto;
-  font-size: xx-large;
-}
 
 /* TITLE */
 h1 {
@@ -50,7 +38,7 @@ h1 {
 
 h3 {
   text-align: center;
-  margin: 2px 0 6px 0;   /* 🔥 spacing reduced */
+  margin: 2px 0 6px 0;   
   font-family: "Oswald", sans-serif;
   color: #f00592;
   font-size: 50px;
@@ -112,10 +100,36 @@ h3 {
   margin-bottom: 10px;
 }
 
+/* letter boxes */
+.letter {
+  display: inline-block;
+  min-width: 36px;
+  width: 36px;
+  margin: 0 6px;
+  padding: 6px 0;
+  text-align: center;
+  border-bottom: 3px solid #ff4fc3;
+  color: #ffd6f3;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.letter.space {
+  border-bottom: none;
+  width: 18px;
+  margin: 0 12px;
+}
+.letter.revealed {
+  color: #fff;
+  border-bottom: none;
+}
+.letter.unrevealed {
+  opacity: 0.95;
+}
+
 /* HINT */
 .hint {
   width: 100%;
-  margin: 0 auto 6px auto;  /* 🔥 spacing reduced */
+  margin: 0 auto 6px auto; 
   border: 1px solid  #f00592;;
   background: rgba(242, 5, 163, 0.08);
   padding: 4px;
@@ -167,4 +181,20 @@ input:not(.guess-input) {
 .buttons button:first-child {
   background: linear-gradient(135deg, #f00592, #ff77d4);
   color: #1a0019;
+}
+
+.result {
+  text-align: center;
+  margin: 10px 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+.result.right { color: #8ef58e; }
+.result.wrong { color: #ff8e8e; }
+
+.loading-overlay {
+  text-align: center;
+  color: #ffd6f3;
+  opacity: 0.9;
+  margin-bottom: 8px;
 }

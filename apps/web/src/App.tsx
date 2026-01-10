@@ -57,7 +57,6 @@ export default function App() {
   return (
     <div className="app">
       <div className="card neon">
-        <div className="logo">🎬</div>
 
         <h1 className="title">CINE CIPHER</h1>
 
