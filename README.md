@@ -1,4 +1,4 @@
-# GUESS IT right!
+# CINE CIPHER
 
 A fast-paced, timed trivia game about music and cinema. Players answer creative clues (instrumental tunes, translated lyrics, images, or story summaries) and earn points for streaks of correct answers. The app is designed for serverless deployment on Netlify.
 
