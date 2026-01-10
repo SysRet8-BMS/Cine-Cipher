@@ -1,0 +1,170 @@
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #2a0028, #000);
+  color: #f515d0;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* MAIN CARD */
+.card {
+  width: 1020px;
+  background: linear-gradient(145deg, #120011, #1a0019);
+  border: 2px solid #ff4fc3;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 0 25px rgba(255, 79, 195, 0.3);
+}
+
+/* LOGO */
+.logo {
+  width: 75px;
+  height: 75px;
+  background: linear-gradient(135deg, #f00592, #ff77d4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  margin: auto;
+  font-size: xx-large;
+}
+
+/* TITLE */
+h1 {
+  text-align: center;
+  margin-bottom: 4px;
+  font-family: "BBH Bartle", cursive;
+  color: #f00592;
+  font-size: 50px;
+}
+
+h3 {
+  text-align: center;
+  margin: 2px 0 6px 0;   /* 🔥 spacing reduced */
+  font-family: "Oswald", sans-serif;
+  color: #f00592;
+  font-size: 50px;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  margin: 18px 0;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ff4fc3;
+  background: transparent;
+  color: #ffd6f3;
+  font-family: "Oswald", sans-serif;
+  font-size: xx-large;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tabs .active {
+  background: linear-gradient(135deg, #f00592, #ff77d4);
+  color: #1a0019;
+}
+
+/* STATS */
+.stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-family: "BBH Bartle", cursive;
+  font-size: x-large;
+  color: #ffb3e6;
+}
+
+/* TIMER */
+.timer {
+  width: 280px;
+  height: 90px;
+  margin: 0 auto 20px auto;
+  background: linear-gradient(135deg, #f00592, #ff77d4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10dvh;
+  border-radius: 12px;
+  color: #140513;
+}
+
+/* WORD */
+.word {
+  display: flex;
+  justify-content: center;
+  font-family: "Caveat", cursive;
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+/* HINT */
+.hint {
+  width: 100%;
+  margin: 0 auto 6px auto;  /* 🔥 spacing reduced */
+  border: 1px solid  #f00592;;
+  background: rgba(242, 5, 163, 0.08);
+  padding: 4px;
+  font-family: "Oswald", sans-serif;
+  font-size: 30px;
+  letter-spacing: 1px;
+  line-height: 1.2;
+}
+
+/* INPUT */
+.guess-input {
+  display: block;
+  width: 50%;
+  max-width: 720px;
+  padding: 8px 10px;
+  background: #260334;
+  border: 1px solid #ff4fc3;
+  color: #ffd6f3;
+  font-family: "Oswald", sans-serif;
+  font-size: xx-large;
+  margin: 0 auto 12px auto;
+  text-align: center;
+  border-radius: 6px;
+}
+
+/* keep generic input fallback (smaller scope) */
+input:not(.guess-input) {
+  padding: 4px;
+}
+
+/* BUTTONS */
+.buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.buttons button {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ff4fc3;
+  background: transparent;
+  color: #f00592;;
+  cursor: pointer;
+  font-size:xx-large;
+  font-family: "Oswald", sans-serif;
+
+}
+
+.buttons button:first-child {
+  background: linear-gradient(135deg, #f00592, #ff77d4);
+  color: #1a0019;
+}
