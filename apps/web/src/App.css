@@ -137,6 +137,7 @@ h3 {
   font-size: 30px;
   letter-spacing: 1px;
   line-height: 1.2;
+  color: #f00592;
 }
 
 /* INPUT */
@@ -192,9 +193,48 @@ input:not(.guess-input) {
 .result.right { color: #8ef58e; }
 .result.wrong { color: #ff8e8e; }
 
+/* make result box more prominent */
+.result {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
 .loading-overlay {
   text-align: center;
   color: #ffd6f3;
   opacity: 0.9;
   margin-bottom: 8px;
 }
+
+/* Applause / confetti overlay */
+.applause-overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 9999;
+}
+.confetti {
+  position: absolute;
+  top: -10vh;
+  border-radius: 2px;
+  opacity: 0.95;
+  will-change: transform, opacity;
+  animation-name: confetti-fall;
+  animation-timing-function: cubic-bezier(.2,.7,.2,1);
+  animation-fill-mode: forwards;
+}
+@keyframes confetti-fall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  60% { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(540deg); opacity: 0; }
+}
+
+/* small hint box wrapper to allow multi-line display */
+.hint-box { display:block; margin-top:6px; }
+

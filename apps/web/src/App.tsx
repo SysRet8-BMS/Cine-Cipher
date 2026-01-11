@@ -1,133 +1,213 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import Applause from "./components/Applause";
 
 export default function App() {
-  const answer = "THE DARK KNIGHT";
-  const MAX_HINTS = 2;
+  const MOVIES = [
+    "THE DARK KNIGHT",
+    "INCEPTION",
+    "PULP FICTION",
+    "GLADIATOR",
+    "INTERSTELLAR",
+    "KPOP DEMON HUNTERS",
+    "AVENGERS ENDGAME",
+    "FORREST GUMP",
+    "THE GOD FATHER",
+    "LIFE OF PI",
+    "THE SHAWSHANK REDEMPTION",
+    "TITANIC",
+    "GANGUBAI KATHIAWADI",
+    "PUSHPA THE RISE",
+    "OPPENHEIMER",
+    "SHUTTER ISLAND",
+    "THE MATRIX",
+    "WHIPLASH",
+    "VIOLET EVERGARDEN",
+    "FIVE FEET APART",
+    "GOOD WILL HUNTING",
+    "LA LA LAND",
+    "THE SOCIAL NETWORK", 
+    "THE WOLF OF WALL STREET",  
+    "JOKER",
+    "TRUMAN SHOW",
+    "PRIDE AND PREJUDICE",  
+    "ETERNAL SUNSHINE OF THE SPOTLESS MIND",
+    
+  ];
 
-  // revealed array auto-sized to the answer; spaces are considered already "revealed"
-  const [revealed, setRevealed] = useState(() =>
-    Array.from(answer).map((c) => c === " ")
-  );
-  const [time, setTime] = useState(30); // example starting time (adjust as needed)
+  const TIMER_START = 45;
+  const MAX_HINTS = 4;
+  const STOP_WORDS = ["THE", "OF", "IS", "A", "AN", "AND", "TO", "IN"];
+
+  const [movieIndex, setMovieIndex] = useState(0);
+  const [answer, setAnswer] = useState(MOVIES[0]);
+  const [revealed, setRevealed] = useState([]);
+  const [time, setTime] = useState(TIMER_START);
   const [pulse, setPulse] = useState(false);
   const [guess, setGuess] = useState("");
   const [attempts, setAttempts] = useState(0);
   const [hintsUsed, setHintsUsed] = useState(0);
   const [hintText, setHintText] = useState("");
+  const [celebrate, setCelebrate] = useState(false);
+  const [result, setResult] = useState(null);
 
-  // Countdown timer with a small pulse animation on each tick
+  /* 🔒 Remove title words from hint (except stop words) */
+  const sanitizeHint = (hint, title) => {
+    if (!hint) return hint;
+
+    let cleaned = hint;
+    title
+      .toUpperCase()
+      .split(" ")
+      .filter(w => w && !STOP_WORDS.includes(w))
+      .forEach(word => {
+        cleaned = cleaned.replace(
+          new RegExp(`\\b${word}\\b`, "gi"),
+          "_".repeat(word.length)
+        );
+      });
+
+    return cleaned;
+  };
+
+  /* 🔄 Reset state when movie changes */
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTime((t) => {
-        const next = t > 0 ? t - 1 : 0;
+    setRevealed(Array.from(answer).map(c => c === " "));
+    setHintsUsed(0);
+    setAttempts(0);
+    setGuess("");
+    setResult(null);
+    setTime(TIMER_START);
+  }, [answer]);
+
+  /* ⏱ TIMER — auto move on timeout */
+  useEffect(() => {
+    if (celebrate) return; // pause timer during confetti
+
+    const interval = setInterval(() => {
+      setTime(t => {
+        if (t <= 1) {
+          clearInterval(interval);
+          moveToNext(); 
+          return TIMER_START;
+        }
         setPulse(true);
-        // remove pulse quickly so it can re-trigger on next tick
-        setTimeout(() => setPulse(false), 260);
-        return next;
+        setTimeout(() => setPulse(false), 200);
+        return t - 1;
       });
     }, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
-  // Fetch hint from backend (Netlify function) when component mounts
+    return () => clearInterval(interval);
+  }, [answer, celebrate]);
+
+  /* 💡 Fetch & sanitize hint */
   useEffect(() => {
     const fetchHint = async () => {
       try {
         const q = encodeURIComponent(answer);
         const res = await fetch(`/.netlify/functions/game-api?query=${q}`);
-        if (!res.ok) {
-          console.warn("Hint fetch failed", res.status);
-          setHintText("No hint available");
-          return;
-        }
         const data = await res.json();
-        const text = data?.hints?.[0] || "";
-        console.log("HINT FROM API:", data?.hints, data);
-        setHintText(text || "No hint available");
-      } catch (e) {
-        console.error("Hint fetch error:", e);
+        const rawHint = data?.hints?.[0] || "No hint available";
+        setHintText(sanitizeHint(rawHint, answer));
+      } catch {
         setHintText("No hint available");
       }
     };
-
     fetchHint();
   }, [answer]);
 
+  /* ⏭️ Move to next movie */
+  const moveToNext = () => {
+    setMovieIndex(i => {
+      const next = (i + 1) % MOVIES.length;
+      setAnswer(MOVIES[next]);
+      return next;
+    });
+  };
+
+  /* ✅ Submit Guess */
   const submitGuess = () => {
-    setAttempts((a) => a + 1);
+    setAttempts(a => a + 1);
+
     if (guess.trim().toUpperCase() === answer) {
-      alert("Correct!");
+      setResult({ text: "Correct!", type: "right" });
+      setCelebrate(true); 
     } else {
-      alert("Wrong guess");
+      setResult({ text: "Wrong guess", type: "wrong" });
     }
+
     setGuess("");
   };
 
+  /* ⏳ Auto-hide result text */
+  useEffect(() => {
+    if (!result) return;
+    const t = setTimeout(() => setResult(null), 2500);
+    return () => clearTimeout(t);
+  }, [result]);
+
   const revealLetter = () => {
-    if (hintsUsed >= MAX_HINTS) return;
-    const idx = Array.from(answer).findIndex(
-      (ch, i) => ch !== " " && !revealed[i]
-    );
-    if (idx !== -1) {
-      setRevealed((prev) => {
-        const copy = [...prev];
-        copy[idx] = true;
-        return copy;
-      });
-      setHintsUsed((h) => h + 1);
-    }
-  };
+  if (hintsUsed >= MAX_HINTS) return;
+
+  // collect all unrevealed, non-space indexes
+  const unrevealedIndexes = Array.from(answer)
+    .map((c, i) => (c !== " " && !revealed[i] ? i : -1))
+    .filter(i => i !== -1);
+
+  if (unrevealedIndexes.length === 0) return;
+
+  // pick a random index
+  const randomIdx =
+    unrevealedIndexes[Math.floor(Math.random() * unrevealedIndexes.length)];
+
+  setRevealed(prev => {
+    const copy = [...prev];
+    copy[randomIdx] = true;
+    return copy;
+  });
+
+  setHintsUsed(h => h + 1);
+};
 
   return (
     <div className="app">
+      <Applause
+        show={celebrate}
+        onFinish={() => {
+          setCelebrate(false);
+          moveToNext(); // ✅ move ONLY after correct guess
+        }}
+      />
+
       <div className="card neon">
-
         <h1 className="title">CINE CIPHER</h1>
-
-        <div className="tabs">
-          <button className="tab active">📽 Movies</button>
-          <button className="tab">𝄞 Songs</button>
-        </div>
 
         <div className="stats">
           <span>Attempts: {attempts}</span>
           <span>Hints Used: {hintsUsed}</span>
-          <span>Total: 0</span>
         </div>
 
         <div className={`timer ${pulse ? "pulse" : ""}`}>
-          <div className="stopwatch">⏱</div>
-          <div className="time-text">
-            {Math.floor(time / 60)}:{(time % 60).toString().padStart(2, "0")}
-          </div>
+          ⏱ {Math.floor(time / 60)}:{(time % 60).toString().padStart(2, "0")}
         </div>
 
-        {/* Word: each character gets its own span */}
-        <div className="word" aria-label="puzzle word">
-          {Array.from(answer).map((c, i) => {
-            const isSpace = c === " ";
-            const showChar = revealed[i] && !isSpace ? c : "";
-            return (
-              <span
-                key={i}
-                className={`letter ${isSpace ? "space" : ""} ${
-                  revealed[i] && !isSpace ? "revealed" : ""
-                }`}
-                aria-hidden={isSpace ? true : false}
-              >
-                {showChar}
-              </span>
-            );
-          })}
+        <div className="word">
+          {Array.from(answer).map((c, i) => (
+            <span
+              key={i}
+              className={`letter ${c === " " ? "space" : ""} ${
+                revealed[i] ? "revealed" : ""
+              }`}
+            >
+              {revealed[i] && c !== " " ? c : ""}
+            </span>
+          ))}
         </div>
 
         <div className="hint">
-  <strong>💡 Hint:</strong>
-  <div className="hint-box">
-    <span className="hint-text">{hintText}</span>
-  </div>
-</div>
+          <strong>💡 Hint:</strong>
+          <div className="hint-box">{hintText}</div>
+        </div>
 
         <h3 className="prompt">Guess the movie!</h3>
 
@@ -138,21 +218,13 @@ export default function App() {
           placeholder="Type your guess..."
         />
 
+        {result && (
+          <div className={`result ${result.type}`}>{result.text}</div>
+        )}
+
         <div className="buttons">
-          <button className="btn submit" onClick={submitGuess}>
-            Submit Guess
-          </button>
-          <button
-            className="btn reveal"
-            onClick={revealLetter}
-            disabled={hintsUsed >= MAX_HINTS}
-            aria-disabled={hintsUsed >= MAX_HINTS}
-            title={
-              hintsUsed >= MAX_HINTS
-                ? "No hints left"
-                : `Reveal Letter (${MAX_HINTS - hintsUsed} left)`
-            }
-          >
+          <button onClick={submitGuess}>Submit Guess</button>
+          <button onClick={revealLetter} disabled={hintsUsed >= MAX_HINTS}>
             👁 Reveal Letter ({MAX_HINTS - hintsUsed} left)
           </button>
         </div>
