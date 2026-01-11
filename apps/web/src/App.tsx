@@ -14,6 +14,7 @@ export default function App() {
   const [guess, setGuess] = useState("");
   const [attempts, setAttempts] = useState(0);
   const [hintsUsed, setHintsUsed] = useState(0);
+  const [hintText, setHintText] = useState("");
 
   // Countdown timer with a small pulse animation on each tick
   useEffect(() => {
@@ -28,6 +29,30 @@ export default function App() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Fetch hint from backend (Netlify function) when component mounts
+  useEffect(() => {
+    const fetchHint = async () => {
+      try {
+        const q = encodeURIComponent(answer);
+        const res = await fetch(`/.netlify/functions/game-api?query=${q}`);
+        if (!res.ok) {
+          console.warn("Hint fetch failed", res.status);
+          setHintText("No hint available");
+          return;
+        }
+        const data = await res.json();
+        const text = data?.hints?.[0] || "";
+        console.log("HINT FROM API:", data?.hints, data);
+        setHintText(text || "No hint available");
+      } catch (e) {
+        console.error("Hint fetch error:", e);
+        setHintText("No hint available");
+      }
+    };
+
+    fetchHint();
+  }, [answer]);
 
   const submitGuess = () => {
     setAttempts((a) => a + 1);
@@ -98,8 +123,11 @@ export default function App() {
         </div>
 
         <div className="hint">
-          <strong>💡 Hint:</strong>
-        </div>
+  <strong>💡 Hint:</strong>
+  <div className="hint-box">
+    <span className="hint-text">{hintText}</span>
+  </div>
+</div>
 
         <h3 className="prompt">Guess the movie!</h3>
 

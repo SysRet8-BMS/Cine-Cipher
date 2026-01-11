@@ -1,8 +1,15 @@
 import type { Handler } from "@netlify/functions";
 
+// Minimal `process` declaration to satisfy TypeScript in this function
+declare const process: { env: Record<string, string | undefined> };
 const TMDB_BASE = "https://api.themoviedb.org/3";
 
-const getKey = () => process.env.TMDB_API_KEY || "f091add1b7dff0fcb7614e3e86b7f03e";
+// Return the full overview (do not truncate after punctuation).
+const truncateOverview = (raw?: unknown) =>
+  String(raw ?? "").replace(/\s+/g, " ").trim();
+
+const getKey = () =>
+  process.env.TMDB_API_KEY || "f091add1b7dff0fcb7614e3e86b7f03e";
 
 const json = (status: number, body: unknown) => ({
   statusCode: status,
@@ -20,90 +27,113 @@ export const handler: Handler = async (event) => {
   const qs = event.queryStringParameters || {};
 
   try {
-    // Search movies: ?query=inception
+    /* ============================
+       SEARCH MOVIE (?query=...)
+       ============================ */
     if (qs.query) {
-      // perform search, then fetch details for the first match to get overview
-      const url = `${TMDB_BASE}/search/movie?api_key=${encodeURIComponent(key)}&query=${encodeURIComponent(qs.query)}`;
-      const res = await fetch(url);
-      if (!res.ok) return json(res.status, { error: await res.text() });
-      const search = await res.json();
-      // iterate search results and pick the first movie that has an overview
+      const searchUrl = `${TMDB_BASE}/search/movie?api_key=${encodeURIComponent(
+        key
+      )}&query=${encodeURIComponent(qs.query)}`;
+
+      const searchRes = await fetch(searchUrl);
+      if (!searchRes.ok)
+        return json(searchRes.status, { error: await searchRes.text() });
+
+      const search = await searchRes.json();
       const results = search.results || [];
+
       let chosenDetails: any = null;
+
+      // Find first movie with a valid overview
       for (const r of results) {
         if (!r?.id) continue;
-        const detailsUrl = `${TMDB_BASE}/movie/${encodeURIComponent(r.id)}?api_key=${encodeURIComponent(key)}&append_to_response=credits,images`;
+
+        const detailsUrl = `${TMDB_BASE}/movie/${encodeURIComponent(
+          r.id
+        )}?api_key=${encodeURIComponent(key)}&append_to_response=credits,images`;
+
         const detRes = await fetch(detailsUrl);
         if (!detRes.ok) continue;
+
         const details = await detRes.json();
-        if (details && details.overview && String(details.overview).trim().length > 0) {
+        if (details?.overview?.trim()) {
           chosenDetails = details;
           break;
         }
       }
 
       if (!chosenDetails) {
-        // no movie with an overview found in search results
-        return json(200, { results, hints: [], titlePattern: null, details: null });
+        return json(200, {
+          results,
+          hints: [],
+          titlePattern: null,
+          details: null,
+        });
       }
 
-      const hints = [String(chosenDetails.overview).trim()];
-      const title = chosenDetails.title || chosenDetails.original_title || "";
-      const titlePattern = String(title).split("").map((ch) => (/[A-Za-z0-9]/.test(ch) ? "-" : ch)).join("");
+      const hints = [truncateOverview(chosenDetails.overview)];
 
-      return json(200, { results, hints, titlePattern, details: chosenDetails });
+
+      const title =
+        chosenDetails.title || chosenDetails.original_title || "";
+
+      const titlePattern = title
+        .split("")
+        .map((ch: string) =>
+          /[A-Za-z0-9]/.test(ch) ? "-" : ch
+        )
+        .join("");
+
+      return json(200, {
+        results,
+        hints,
+        titlePattern,
+        details: chosenDetails,
+      });
     }
 
-    // Random movie with overview: ?random=true
-    if (qs.random === "true") {
-      // fetch popular movies pages (limit to first 3 pages) and pick first with overview
-      const limitPages = 3;
-      for (let p = 1; p <= limitPages; p++) {
-        const popUrl = `${TMDB_BASE}/movie/popular?api_key=${encodeURIComponent(key)}&page=${p}`;
-        const pres = await fetch(popUrl);
-        if (!pres.ok) continue;
-        const pop = await pres.json();
-        const results = pop.results || [];
-        for (const r of results) {
-          if (!r?.id) continue;
-          const detailsUrl = `${TMDB_BASE}/movie/${encodeURIComponent(r.id)}?api_key=${encodeURIComponent(key)}&append_to_response=credits,images`;
-          const detRes = await fetch(detailsUrl);
-          if (!detRes.ok) continue;
-          const details = await detRes.json();
-          if (details && details.overview && String(details.overview).trim().length > 0) {
-            const hints = [String(details.overview).trim()];
-            const title = details.title || details.original_title || "";
-            const titlePattern = String(title).split("").map((ch) => (/[A-Za-z0-9]/.test(ch) ? "-" : ch)).join("");
-            return json(200, { hints, titlePattern, details });
-          }
-        }
-      }
-      return json(200, { hints: [], titlePattern: null, details: null });
-    }
-
-    // Get movie details: ?id=550
+    /* ============================
+       MOVIE DETAILS (?id=...)
+       ============================ */
     if (qs.id) {
-      const url = `${TMDB_BASE}/movie/${encodeURIComponent(qs.id)}?api_key=${encodeURIComponent(key)}&append_to_response=credits,images`;
-      const res = await fetch(url);
-      if (!res.ok) return json(res.status, { error: await res.text() });
+      const detailsUrl = `${TMDB_BASE}/movie/${encodeURIComponent(
+        qs.id
+      )}?api_key=${encodeURIComponent(key)}&append_to_response=credits,images`;
+
+      const res = await fetch(detailsUrl);
+      if (!res.ok)
+        return json(res.status, { error: await res.text() });
+
       const data = await res.json();
 
-      const hints = [] as string[];
-      if (data.overview) {
-        hints.push(String(data.overview).trim());
-      }
+        const hints = data?.overview ? [truncateOverview(data.overview)] : [];
+
 
       const title = data.title || data.original_title || "";
-      const titlePattern = String(title).split("").map((ch) => (/[A-Za-z0-9]/.test(ch) ? "-" : ch)).join("");
+      const titlePattern = title
+        .split("")
+        .map((ch: string) =>
+          /[A-Za-z0-9]/.test(ch) ? "-" : ch
+        )
+        .join("");
 
-      return json(200, { ...data, hints, titlePattern });
+      return json(200, {
+        ...data,
+        hints,
+        titlePattern,
+      });
     }
 
-    // If no recognized query, return usage
+    /* ============================
+       INVALID REQUEST
+       ============================ */
     return json(400, {
-      error: "Missing query parameter. Use ?query=... to search or ?id=... to fetch details",
+      error:
+        "Missing query parameter. Use ?query=... or ?id=...",
     });
   } catch (err: any) {
-    return json(500, { error: err?.message || String(err) });
+    return json(500, {
+      error: err?.message || String(err),
+    });
   }
 };
