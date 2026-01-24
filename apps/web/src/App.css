@@ -18,7 +18,7 @@ body {
 
 /* MAIN CARD */
 .card {
-  width: 1020px;
+  width: 1000px;
   background: linear-gradient(145deg, #120011, #1a0019);
   border: 2px solid #ff4fc3;
   border-radius: 16px;
@@ -28,12 +28,37 @@ body {
 
 
 /* TITLE */
+.game-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.game-title-icon {
+  width: 70px;
+  height: 70px;
+  margin-top: 5px;
+  filter: invert(72%) sepia(85%) saturate(5418%) hue-rotate(301deg) brightness(100%) contrast(101%);
+  animation: tilt 2s ease-in-out infinite;
+}
+
+@keyframes tilt {
+  0%, 100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
 h1 {
   text-align: center;
-  margin-bottom: 4px;
+  margin-bottom: 0;
   font-family: "BBH Bartle", cursive;
   color: #f00592;
-  font-size: 50px;
+  font-size: 60px;
 }
 
 h3 {
@@ -79,16 +104,50 @@ h3 {
 
 /* TIMER */
 .timer {
-  width: 280px;
+  width: 250px;
   height: 90px;
   margin: 0 auto 20px auto;
   background: linear-gradient(135deg, #f00592, #ff77d4);
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   font-size: 10dvh;
-  border-radius: 12px;
+  border-radius: 4px;
   color: #140513;
+  transition: background 0.3s ease;
+}
+
+.timer.urgent {
+  background: linear-gradient(135deg, #ff0000, #ff4444);
+  animation: timerBlink 0.5s ease-in-out infinite;
+}
+
+@keyframes timerBlink {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 40px rgba(255, 0, 0, 1);
+  }
+}
+
+.timer-icon {
+  width: 70px;
+  height: 70px;
+  filter: invert(5%) sepia(8%) saturate(4899%) hue-rotate(265deg) brightness(95%) contrast(94%);
+  animation: blink 1s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
 }
 
 /* WORD */
@@ -111,7 +170,7 @@ h3 {
   border-bottom: 3px solid #ff4fc3;
   color: #ffd6f3;
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
 }
 .letter.space {
   border-bottom: none;
@@ -134,10 +193,32 @@ h3 {
   background: rgba(242, 5, 163, 0.08);
   padding: 4px;
   font-family: "Oswald", sans-serif;
-  font-size: 30px;
+  font-size: 28px;
   letter-spacing: 1px;
   line-height: 1.2;
   color: #f00592;
+}
+
+.hint strong {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hint-icon {
+  width: 60px;
+  height: 60px;
+  filter: invert(72%) sepia(85%) saturate(5418%) hue-rotate(301deg) brightness(100%) contrast(101%);
+}
+
+.genre {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f00592;
+  font-family: "Oswald", sans-serif;
+  font-size: 28px;
+  color: #ff4fc3;
+  letter-spacing: 1px;
 }
 
 /* INPUT */
@@ -176,12 +257,26 @@ input:not(.guess-input) {
   cursor: pointer;
   font-size:xx-large;
   font-family: "Oswald", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 
 }
 
 .buttons button:first-child {
   background: linear-gradient(135deg, #f00592, #ff77d4);
   color: #1a0019;
+}
+
+.button-icon {
+  width: 50px;
+  height: 50px;
+  filter: invert(72%) sepia(85%) saturate(5418%) hue-rotate(301deg) brightness(100%) contrast(101%);
+}
+
+.buttons button:first-child .button-icon {
+  filter: invert(7%) sepia(12%) saturate(1893%) hue-rotate(276deg) brightness(97%) contrast(101%);
 }
 
 .result {

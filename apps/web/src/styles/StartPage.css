@@ -1,0 +1,222 @@
+/* START PAGE STYLES */
+.start-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, #2a0028, #000);
+}
+
+.start-card {
+  width: 90%;
+  max-width: 800px;
+  background: linear-gradient(145deg, #120011, #1a0019);
+  border: 2px solid #ff4fc3;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 0 40px rgba(255, 79, 195, 0.4);
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tilt {
+  0%, 100% {
+    transform: rotate(-1deg);
+  }
+  50% {
+    transform: rotate(1deg);
+  }
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.start-title {
+  text-align: center;
+  font-family: "BBH Bartle", cursive;
+  color: #f00592;
+  font-size: 40px;
+  margin: 0;
+  text-shadow: 0 0 20px #f00592, 0 0 40px rgba(255, 77, 195, 0.5);
+  letter-spacing: 2px;
+  animation: tilt 2s ease-in-out infinite;
+}
+
+.title-icon {
+  width: 60px;
+  height: 60px;
+  filter: invert(72%) sepia(85%) saturate(5418%) hue-rotate(301deg) brightness(100%) contrast(101%);
+  animation: tilt 2s ease-in-out infinite;
+}
+
+@keyframes tilt {
+  0%, 100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+.start-subtitle {
+  text-align: center;
+  color: #ffb3e6;
+  font-size: 30px;
+  margin: 0 0 30px 0;
+  font-family: "Oswald", sans-serif;
+  letter-spacing: 1px;
+}
+
+.start-content {
+  margin-bottom: 40px;
+  font-size: 20px;
+}
+
+.start-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+  font-size:20 px;
+}
+
+.feature {
+  background: rgba(240, 5, 146, 0.1);
+  border: 1px solid #ff4fc3;
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.feature:hover {
+  background: rgba(240, 5, 146, 0.2);
+  box-shadow: 0 0 15px rgba(255, 79, 195, 0.3);
+  transform: translateY(-5px);
+}
+
+.feature-icon {
+  font-size: 52px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.feature-icon-img {
+  width: 70px;
+  height: 70px;
+  display: block;
+  margin: 0 auto 8px auto;
+  filter: invert(72%) sepia(85%) saturate(5418%) hue-rotate(301deg) brightness(100%) contrast(101%) drop-shadow(0 0 8px rgba(255, 79, 195, 0.4)) drop-shadow(0 0 12px rgba(240, 5, 146, 0.2));
+  animation: tilt 2s ease-in-out infinite;
+}
+
+.feature p {
+  color: #ffd6f3;
+  margin: 0;
+  font-size: 20px;
+  font-family: "Oswald", sans-serif;
+}
+
+.start-rules {
+  background: rgba(240, 5, 146, 0.08);
+  border: 1px solid #f00592;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.start-rules h2 {
+  color: #f00592;
+  font-family: "Oswald", sans-serif;
+  font-size: 24px;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.start-rules ol {
+  color: #ffb3e6;
+  margin: 0;
+  padding-left: 20px;
+  font-family: "Oswald", sans-serif;
+}
+
+.start-rules li {
+  margin: 8px 0;
+  line-height: 1.6;
+}
+
+.start-button {
+  display: block;
+  width: 70%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #f00592, #ff77d4);
+  border: none;
+  border-radius: 5px;
+  color: #1a0019;
+  font-size: 45px;
+  font-family: "Fjalla One", sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(240, 5, 146, 0.4);
+}
+
+.start-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(240, 5, 146, 0.6);
+}
+
+.start-button:active {
+  transform: scale(0.98);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .start-card {
+    padding: 24px;
+  }
+
+  .start-title {
+    font-size: 40px;
+  }
+
+  .start-subtitle {
+    font-size: 16px;
+  }
+
+  .start-features {
+    grid-template-columns: 1fr;
+  }
+
+  .start-rules ol {
+    padding-left: 20px;
+  }
+
+  .start-rules h2 {
+    font-size: 20px;
+  }
+
+  .start-button {
+    font-size: 18px;
+    padding: 14px 28px;
+  }
+}

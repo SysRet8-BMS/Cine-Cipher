@@ -1,0 +1,127 @@
+.winner-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a0019 0%, #2d0041 50%, #1a0019 100%);
+  padding: 20px;
+}
+
+.winner-content {
+  text-align: center;
+  animation: slideUp 0.6s ease-out;
+  position: relative;
+}
+
+.winner-title {
+  font-family: "BBH Bartle", cursive;
+  font-size: 80px;
+  color: #ff4fc3;
+  margin-bottom: 10px;
+  text-shadow: 0 0 20px #f00592, 0 0 40px rgba(255, 77, 195, 0.5);
+  animation: pulse-glow 1.5s ease-in-out infinite;
+  letter-spacing: 2px;
+}
+
+.winner-subtitle {
+  font-family: "Oswald", sans-serif;
+  font-size: 36px;
+  color: #ffd6f3;
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+.winner-message {
+  background: rgba(240, 5, 146, 0.1);
+  border: 2px solid #ff4fc3;
+  border-radius: 2px;
+  padding: 30px;
+  margin-bottom: 40px;
+  max-width: 600px;
+  
+}
+
+.winner-message p {
+  font-family: "Oswald", sans-serif;
+  font-size: 24px;
+  color: #ffd6f3;
+  margin: 15px 0;
+  letter-spacing: 1px;
+  line-height: 1.6;
+  
+}
+
+.winner-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+
+.winner-buttons button {
+  padding: 16px 32px;
+  font-size: 24px;
+  font-family: "Oswald", sans-serif;
+  border: 2px solid #ff4fc3;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.play-again-btn {
+  background: linear-gradient(135deg, #f00592, #ff77d4);
+  color: #1a0019;
+}
+
+.play-again-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px #f00592, 0 0 60px rgba(255, 77, 195, 0.4);
+}
+
+.home-btn {
+  background: transparent;
+  color: #ff4fc3;
+}
+
+.home-btn:hover {
+  background: rgba(255, 77, 195, 0.1);
+  box-shadow: 0 0 30px #ff4fc3;
+  transform: scale(1.05);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    text-shadow: 0 0 20px #f00592, 0 0 40px rgba(255, 77, 195, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 30px #f00592, 0 0 60px rgba(255, 77, 195, 0.7);
+    transform: scale(1.05);
+  }
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100px) rotateZ(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotateZ(360deg);
+    opacity: 0;
+  }
+}

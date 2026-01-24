@@ -12,7 +12,10 @@ const COLORS = [
   "#f00592",
   "#8ef58e",
   "#fff176",
-  "#4fc3ff",
+  "#4f92ff",
+  "#a084ff",
+  "#ff8c4f",
+
 ];
 
 export default function Applause({ show, duration = 3500, onFinish }: Props) {
