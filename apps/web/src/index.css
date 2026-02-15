@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&family=Chakra+Petch:wght@400;500;600;700&display=swap");
+
+:root {
+	--bg-0: #07051a;
+	--bg-1: #140a2f;
+	--bg-2: #251159;
+	--surface-1: rgba(24, 14, 58, 0.93);
+	--surface-2: rgba(44, 23, 94, 0.8);
+	--border: #9c82ff;
+	--border-soft: rgba(156, 130, 255, 0.56);
+	--accent: #ff6ecf;
+	--accent-strong: #e3d7ff;
+	--text-main: #f7f3ff;
+	--text-muted: #cdc4ef;
+	--success: #98f7b0;
+	--error: #ffb3c7;
+	--highlight: #ffd0f2;
+	--cta-start: #8f7dff;
+	--cta-end: #ff6ecf;
+	--cta-ink: #1a1135;
+	--timer-urgent-start: #ff7be0;
+	--timer-urgent-end: #ffacef;
+	--panel-top: rgba(79, 47, 152, 0.38);
+	--panel-bottom: rgba(25, 16, 59, 0.32);
+	--input-bg: rgba(30, 18, 67, 0.9);
+	--shadow-lg: 0 16px 36px rgba(11, 6, 29, 0.58);
+}
+
+html,
+body,
+#root {
+	min-height: 100%;
+}
